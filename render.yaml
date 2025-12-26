@@ -1,0 +1,23 @@
+# $schema: https://render.com/schema/render.yaml.json
+version: "1"
+services:
+
+  - type: keyvalue
+    plan: free
+    region: ohio
+    name: cache
+    ipAllowList: []
+
+  - type: web
+    plan: free
+    region: ohio
+    name: searxng
+    runtime: docker
+    envVars:
+      - key: SEARXNG_SECRET
+        generateValue: true
+      - key: SEARXNG_VALKEY_URL
+        fromService:
+          name: cache
+          type: keyvalue
+          property: connectionString
