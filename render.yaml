@@ -5,19 +5,21 @@ services:
   - type: keyvalue
     plan: free
     region: ohio
-    name: cache
+    name: searxng-cache
     ipAllowList: []
 
   - type: web
     plan: free
     region: ohio
     name: searxng
-    runtime: docker
+    runtime: image
+    image:
+      url: ghcr.io/cybardev/searxng-instance:main
     envVars:
       - key: SEARXNG_SECRET
         generateValue: true
       - key: SEARXNG_VALKEY_URL
         fromService:
-          name: cache
+          name: searxng-cache
           type: keyvalue
           property: connectionString
